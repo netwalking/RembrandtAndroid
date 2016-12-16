@@ -38,3 +38,9 @@ captures/
 
 # Keystore files
 *.jks
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
