@@ -15,14 +15,14 @@ public class RembrandtCompareOptions {
 
     private final double maximumColorDistance;
     private final double maximumPercentageOfDifferentPixels;
-    private final int colorBitmapPixelEqual;
-    private final int colorBitmapPixelDifferent;
+    private final int colorForEquality;
+    private final int colorForDiversity;
 
-    public RembrandtCompareOptions(final double maximumColorDistance, final double maximumPercentageDifference, final int colorBitmapPixelEqual, final int colorBitmapPixelDifferent) {
+    public RembrandtCompareOptions(final double maximumColorDistance, final double maximumPercentageDifference, final int colorForEquality, final int colorForDiversity) {
         this.maximumColorDistance = maximumColorDistance;
         this.maximumPercentageOfDifferentPixels = maximumPercentageDifference;
-        this.colorBitmapPixelEqual = colorBitmapPixelEqual;
-        this.colorBitmapPixelDifferent = colorBitmapPixelDifferent;
+        this.colorForEquality = colorForEquality;
+        this.colorForDiversity = colorForDiversity;
     }
 
     public static RembrandtCompareOptions createDefaultOptions() {
@@ -40,11 +40,11 @@ public class RembrandtCompareOptions {
         return maximumPercentageOfDifferentPixels;
     }
 
-    public int getColorBitmapPixelEqual() {
-        return colorBitmapPixelEqual;
+    public int getColorForEquality() {
+        return colorForEquality;
     }
 
-    public int getColorBitmapPixelDifferent() {
-        return colorBitmapPixelDifferent;
+    public int getColorForDiversity() {
+        return colorForDiversity;
     }
 }

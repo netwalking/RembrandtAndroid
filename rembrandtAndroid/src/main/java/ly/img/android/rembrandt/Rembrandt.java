@@ -33,9 +33,9 @@ public class Rembrandt {
             for (int y = 0; y < height; y++) {
                 final double distance = colorDistanceMatrix.getDistanceAt(x, y);
                 if (isColorDistanceAcceptable(distance)) {
-                    comparisonBitmap.setPixel(x, y, compareOptions.getColorBitmapPixelEqual());
+                    comparisonBitmap.setPixel(x, y, compareOptions.getColorForEquality());
                 } else {
-                    comparisonBitmap.setPixel(x, y, compareOptions.getColorBitmapPixelDifferent());
+                    comparisonBitmap.setPixel(x, y, compareOptions.getColorForDiversity());
                     differentPixels++;
                 }
             }
