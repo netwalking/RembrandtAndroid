@@ -2,12 +2,11 @@
 #pragma rs java_package_name(ly.img.android)
 #pragma rs_fp_relaxed
 
-
 rs_allocation rsAllocationA;
 rs_allocation rsAllocationB;
 rs_allocation rsAllocationC;
 
-uchar4 __Attribute calculateColorDistance(float *v_out, uint32_t x, uint32_t y) {
+void calculateColorDistance(float *v_out, uint32_t x, uint32_t y) {
 
     uchar4 color1 = rsGetElementAt_uchar4(rsAllocationA, x, y);
     uchar4 color2 = rsGetElementAt_uchar4(rsAllocationB, x, y);
