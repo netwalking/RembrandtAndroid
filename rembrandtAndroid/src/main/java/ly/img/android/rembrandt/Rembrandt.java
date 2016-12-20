@@ -19,14 +19,17 @@ public class Rembrandt {
     }
 
     public RembrandtCompareResult compareBitmaps(final Bitmap bitmap1, final Bitmap bitmap2) {
+        TimeIt calc = new TimeIt("calc");
         final RembrandtColorDistanceMatrix colorDistanceMatrix =
                 RembrandtColorDistanceMatrix.calculateColorDistanceMatrix(bitmap1, bitmap2);
+        calc.logElapsedTime();
 
         final int width = colorDistanceMatrix.getWidth();
         final int height = colorDistanceMatrix.getHeight();
         final int pixelsInTotal = colorDistanceMatrix.getPixelsInTotal();
         final Bitmap.Config config = colorDistanceMatrix.getConfig();
 
+        TimeIt set = new TimeIt("set");
         int differentPixels = 0;
         final Bitmap comparisonBitmap = Bitmap.createBitmap(width, height, config);
         for (int x = 0; x < width; x++) {
@@ -40,6 +43,7 @@ public class Rembrandt {
                 }
             }
         }
+        set.logElapsedTime();
 
         final double percentageOfDifferentPixels = differentPixels / pixelsInTotal * 100.0f;
         boolean bitmapsSeemToBeEqual = isPercentageOfDifferentPixelsAcceptable(percentageOfDifferentPixels);
