@@ -18,8 +18,7 @@ public class Rembrandt {
 
     public Rembrandt(final RembrandtCompareOptions compareOptions) {
         if (context == null) {
-            // TODO
-            throw new RuntimeException();
+            throw new NullPointerException("Context is null. Forgot to call init?");
         }
 
         this.compareOptions = compareOptions;
