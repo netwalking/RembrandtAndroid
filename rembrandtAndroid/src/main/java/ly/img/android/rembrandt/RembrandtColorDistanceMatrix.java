@@ -1,8 +1,15 @@
 package ly.img.android.rembrandt;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.ScriptC;
+import android.support.v8.renderscript.Type;
 
+import ly.img.android.ScriptC_ColorDistance;
 import ly.img.android.rembrandt.exceptions.UnequalBitmapConfigException;
 import ly.img.android.rembrandt.exceptions.UnequalBitmapSizesException;
 
@@ -19,7 +26,7 @@ public class RembrandtColorDistanceMatrix {
     private int width;
     private Bitmap.Config config;
 
-    private double[][] colorDistanceMatrix;
+    private float[] colorDistanceMatrix;
 
     private RembrandtColorDistanceMatrix(final Bitmap bitmap1, final Bitmap bitmap2) {
         this.bitmap1 = bitmap1;
@@ -38,7 +45,7 @@ public class RembrandtColorDistanceMatrix {
             width = bitmap1.getWidth();
         }
 
-        colorDistanceMatrix = new double[width][height];
+        colorDistanceMatrix = new float[width * height];
     }
 
     public static RembrandtColorDistanceMatrix calculateColorDistanceMatrix(final Bitmap bitmap1, final Bitmap bitmap2) {
@@ -48,11 +55,21 @@ public class RembrandtColorDistanceMatrix {
     }
 
     private void calculate() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                colorDistanceMatrix[x][y] = calculateColorDistanceAt(x, y);
-            }
-        }
+        // TODO move rs to consttructor
+        RenderScript rs = RenderScript.create(Rembrandt.getContext());
+        Allocation input1 = Allocation.createFromBitmap(rs, bitmap1);
+        Allocation input2 = Allocation.createFromBitmap(rs, bitmap2);
+        Allocation output = Allocation.createTyped(rs, Type.createXY(rs, Element.F32(rs), width, height));
+
+        ScriptC_ColorDistance colorDistance = new ScriptC_ColorDistance(rs);
+        colorDistance.set_rsAllocationA(input1);
+        colorDistance.set_rsAllocationB(input2);
+        colorDistance.set_rsAllocationC(output);
+
+        colorDistance.forEach_calculateColorDistance(output);
+
+        output.syncAll(Allocation.USAGE_SCRIPT);
+        output.copyTo(colorDistanceMatrix);
     }
 
     private double calculateColorDistanceAt(final int x, final int y) {
@@ -86,7 +103,7 @@ public class RembrandtColorDistanceMatrix {
     }
 
     public double getDistanceAt(final int x, final int y) {
-        return colorDistanceMatrix[x][y];
+        return colorDistanceMatrix[x + y * width];
     }
 
     public int getHeight() {

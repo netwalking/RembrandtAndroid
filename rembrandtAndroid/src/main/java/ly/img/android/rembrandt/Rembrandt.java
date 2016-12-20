@@ -1,5 +1,6 @@
 package ly.img.android.rembrandt;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 
 /**
@@ -8,14 +9,24 @@ import android.graphics.Bitmap;
 
 public class Rembrandt {
 
+    private static Application context;
     private RembrandtCompareOptions compareOptions;
 
     public Rembrandt() {
-        this.compareOptions = RembrandtCompareOptions.createDefaultOptions();
+        this(RembrandtCompareOptions.createDefaultOptions());
     }
 
     public Rembrandt(final RembrandtCompareOptions compareOptions) {
+        if (context == null) {
+            // TODO
+            throw new RuntimeException();
+        }
+
         this.compareOptions = compareOptions;
+    }
+
+    public static void init(final Application context) {
+        Rembrandt.context = context;
     }
 
     public RembrandtCompareResult compareBitmaps(final Bitmap bitmap1, final Bitmap bitmap2) {
@@ -64,5 +75,9 @@ public class Rembrandt {
 
     public void setCompareOptions(RembrandtCompareOptions compareOptions) {
         this.compareOptions = compareOptions;
+    }
+
+    public static Application getContext() {
+        return context;
     }
 }
