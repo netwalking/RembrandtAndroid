@@ -2,6 +2,7 @@
 #pragma rs java_package_name(ly.img.android.rembrandt)
 #pragma rs_fp_relaxed
 
+uint different_pixels;
 float allowed_color_distance;
 uchar4 color_equality;
 uchar4 color_diversity;
@@ -30,6 +31,7 @@ void compareBitmaps(uchar4 *unused, uint x, uint y) {
         color_to_set = color_equality;
     } else {
         color_to_set = color_diversity;
+        rsAtomicInc(&different_pixels);
     }
 
     rsSetElementAt_uchar4(comparison_bitmap, color_to_set, x, y);

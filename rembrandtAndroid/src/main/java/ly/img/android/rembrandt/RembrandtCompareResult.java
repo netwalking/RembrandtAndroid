@@ -8,19 +8,19 @@ import android.graphics.Bitmap;
 
 public class RembrandtCompareResult {
 
-    private final int differentPixels;
+    private final long differentPixels;
     private final double percentageOfDifferentPixels;
     private final Bitmap comparisionBitmap;
     private final boolean bitmapsEqual;
 
-    public RembrandtCompareResult(final int differentPixels, final double percentageOfDifferentPixels, final Bitmap comparisionBitmap, final boolean bitmapsEqual) {
+    public RembrandtCompareResult(final long differentPixels, final double percentageOfDifferentPixels, final Bitmap comparisionBitmap, final boolean bitmapsEqual) {
         this.differentPixels = differentPixels;
         this.percentageOfDifferentPixels = percentageOfDifferentPixels;
         this.comparisionBitmap = comparisionBitmap;
         this.bitmapsEqual = bitmapsEqual;
     }
 
-    public int getDifferentPixels() {
+    public long getDifferentPixels() {
         return differentPixels;
     }
 
