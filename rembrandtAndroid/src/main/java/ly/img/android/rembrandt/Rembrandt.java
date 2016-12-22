@@ -8,6 +8,9 @@ import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.Short4;
 import android.util.Log;
 
+import ly.img.android.rembrandt.exceptions.UnequalBitmapConfigException;
+import ly.img.android.rembrandt.exceptions.UnequalBitmapSizesException;
+
 /**
  * Created by winklerrr on 13/12/2016.
  */
@@ -37,6 +40,14 @@ public class Rembrandt {
 
     public synchronized RembrandtCompareResult compareBitmaps(final Bitmap bitmap1,
                                                               final Bitmap bitmap2) {
+        if (!bitmap1.getConfig() == bitmap2.getConfig()) {
+            throw new UnequalBitmapConfigException(bitmap1, bitmap2);
+        }
+
+        if (!(bitmap1.getHeight() == bitmap2.getHeight() && bitmap1.getWidth() == bitmap2.getWidth())) {
+            throw new UnequalBitmapSizesException(bitmap1, bitmap2);
+        }
+
         final Allocation allocationBitmap1 = Allocation.createFromBitmap(renderScript, bitmap1);
         final Allocation allocationBitmap2 = Allocation.createFromBitmap(renderScript, bitmap2);
 
