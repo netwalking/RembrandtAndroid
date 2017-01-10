@@ -20,6 +20,20 @@ public class Rembrandt {
     private static Application context;
     private RembrandtCompareOptions compareOptions;
     private RenderScript renderScript;
+    private ScriptC_rembrandt rembrandtRenderScript;
+
+    private Bitmap bitmap1;
+    private Bitmap bitmap2;
+    private Bitmap comparisonBitmap;
+    private Bitmap.Config config;
+    private int width;
+    private int height;
+
+    private Allocation allocationBitmap1;
+    private Allocation allocationBitmap2;
+    private Allocation allocationComparisonBitmap;
+    private Short4 colorEquality;
+    private Short4 colorDiversity;
 
     public Rembrandt() {
         this(RembrandtCompareOptions.createDefaultOptions());
@@ -38,54 +52,97 @@ public class Rembrandt {
         Rembrandt.context = context;
     }
 
-    public synchronized RembrandtCompareResult compareBitmaps(final Bitmap bitmap1,
-                                                              final Bitmap bitmap2) {
-        if (!bitmap1.getConfig() == bitmap2.getConfig()) {
-            throw new UnequalBitmapConfigException(bitmap1, bitmap2);
-        }
+    public RembrandtComparisonResult compareBitmaps(final Bitmap bitmap1, final Bitmap bitmap2) {
+        this.bitmap1 = bitmap1;
+        this.bitmap2 = bitmap2;
 
-        if (!(bitmap1.getHeight() == bitmap2.getHeight() && bitmap1.getWidth() == bitmap2.getWidth())) {
-            throw new UnequalBitmapSizesException(bitmap1, bitmap2);
-        }
+        prepareComparison();
+        compare();
+        return createComparisonResult();
+    }
 
-        final Allocation allocationBitmap1 = Allocation.createFromBitmap(renderScript, bitmap1);
-        final Allocation allocationBitmap2 = Allocation.createFromBitmap(renderScript, bitmap2);
+    private void prepareComparison() {
+        createComparisonBitmap();
+        createRembrandtRenderScript();
+    }
 
-        final int width = bitmap1.getWidth();
-        final int height = bitmap1.getHeight();
-        final Bitmap.Config config = bitmap1.getConfig();
-
-        final Bitmap comparisonBitmap = Bitmap.createBitmap(width, height, config);
-        final Allocation allocationComparisonBitmap =
-                Allocation.createFromBitmap(renderScript, comparisonBitmap);
-
-        ScriptC_Rembrandt rembrandt = new ScriptC_Rembrandt(renderScript);
-        rembrandt.set_bitmap1(allocationBitmap1);
-        rembrandt.set_bitmap2(allocationBitmap2);
-        rembrandt.set_comparison_bitmap(allocationComparisonBitmap);
-        rembrandt.set_allowed_color_distance(compareOptions.getMaximumColorDistance());
-        rembrandt.set_different_pixels(0);
-
-        Short4 colorEquality = convertColor(compareOptions.getColorForEquality());
-        Short4 colorDiversity = convertColor(compareOptions.getColorForDiversity());
-
-        rembrandt.set_color_equality(colorEquality);
-        rembrandt.set_color_diversity(colorDiversity);
-        rembrandt.forEach_compareBitmaps(allocationComparisonBitmap);
+    private void compare() {
+        rembrandtRenderScript.forEach_compareBitmaps(allocationComparisonBitmap);
 
         allocationComparisonBitmap.syncAll(Allocation.USAGE_SCRIPT);
         allocationComparisonBitmap.copyTo(comparisonBitmap);
-
-        // TODO: get number of different pixels from renderscript
-        final int pixelsInTotal = width * height;
-        Log.i("here", "here");
-        long differentPixels = rembrandt.get_different_pixels();
-        final double percentageOfDifferentPixels = differentPixels / pixelsInTotal * 100.0f;
-        boolean bitmapsSeemToBeEqual = isPercentageOfDifferentPixelsAcceptable(percentageOfDifferentPixels);
-        return new RembrandtCompareResult(differentPixels, percentageOfDifferentPixels, comparisonBitmap, bitmapsSeemToBeEqual);
     }
 
-    private static Short4 convertColor(final int color) {
+    private RembrandtComparisonResult createComparisonResult() {
+//        final int pixelsInTotal = width * height;
+//        long differentPixels = rembrandt.get_pix();
+//        final double percentageOfDifferentPixels = differentPixels / pixelsInTotal * 100.0f;
+//        boolean bitmapsSeemToBeEqual = isPercentageOfDifferentPixelsAcceptable(percentageOfDifferentPixels);
+//        return new RembrandtComparisonResult(differentPixels, percentageOfDifferentPixels, comparisonBitmap, bitmapsSeemToBeEqual);
+        return new RembrandtComparisonResult(0, 0, comparisonBitmap, false);
+    }
+
+    private void createComparisonBitmap() {
+        readBitmapProperties();
+        comparisonBitmap = Bitmap.createBitmap(width, height, config);
+    }
+
+    private void createRembrandtRenderScript() {
+        createAllocations();
+        initRembrandtRenderScript();
+    }
+
+    private void readBitmapProperties() {
+        readBitmapConfig();
+        readBitmapDimensions();
+    }
+
+    private void createAllocations() {
+        allocationBitmap1 = Allocation.createFromBitmap(renderScript, bitmap1);
+        allocationBitmap2 = Allocation.createFromBitmap(renderScript, bitmap2);
+        allocationComparisonBitmap = Allocation.createFromBitmap(renderScript, comparisonBitmap);
+
+        colorEquality = convertColorToShort4(compareOptions.getColorForEquality());
+        colorDiversity = convertColorToShort4(compareOptions.getColorForDiversity());
+    }
+
+    private void initRembrandtRenderScript() {
+        rembrandtRenderScript = new ScriptC_rembrandt(renderScript);
+
+        rembrandtRenderScript.set_rsAllocationBitmap1(allocationBitmap1);
+        rembrandtRenderScript.set_rsAllocationBitmap2(allocationBitmap2);
+        rembrandtRenderScript.set_rsAllocationComparisonBitmap(allocationComparisonBitmap);
+        rembrandtRenderScript.set_allowedColorDistance(compareOptions.getMaximumColorDistance());
+        rembrandtRenderScript.set_colorEquality(colorEquality);
+        rembrandtRenderScript.set_colorDiversity(colorDiversity);
+    }
+
+    private void readBitmapConfig() {
+        if (areBitmapConfigsEqual()) {
+            config = bitmap1.getConfig();
+        } else {
+            throw new UnequalBitmapConfigException(bitmap1, bitmap2);
+        }
+    }
+
+    private void readBitmapDimensions() {
+        if (areBitmapDimensionsEqual()) {
+            width = bitmap1.getWidth();
+            height = bitmap1.getHeight();
+        } else {
+            throw new UnequalBitmapSizesException(bitmap1, bitmap2);
+        }
+    }
+
+    private boolean areBitmapConfigsEqual() {
+        return bitmap1.getConfig() == bitmap2.getConfig();
+    }
+
+    private boolean areBitmapDimensionsEqual() {
+        return bitmap1.getHeight() == bitmap2.getHeight() && bitmap1.getWidth() == bitmap2.getWidth();
+    }
+
+    private static Short4 convertColorToShort4(final int color) {
         final short red = (short) Color.red(color);
         final short green = (short) Color.green(color);
         final short blue = (short) Color.blue(color);

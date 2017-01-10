@@ -1,4 +1,4 @@
-package ly.img.android.example_rembrandt;
+package ly.img.android.example;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ly.img.android.examplerembrandy", appContext.getPackageName());
+        assertEquals("ly.img.android.example", appContext.getPackageName());
     }
 }

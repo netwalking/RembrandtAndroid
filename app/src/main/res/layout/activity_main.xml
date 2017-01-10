@@ -1,52 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/darker_gray"
+    android:padding="16dp"
+    android:id="@+id/activity_main" >
 
-    <!--<LinearLayout-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:id="@+id/l1">-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_main_button_compare"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/activity_main_button" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_main_layout_imageviews"
+        android:layout_above="@id/activity_main_button_compare"
+        android:orientation="vertical" >
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/iv1"
-            android:background="@android:color/holo_orange_light"
-            android:scaleType="centerCrop" />
-    <!--</LinearLayout>-->
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_main_imageview_1"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
 
-    <!--<LinearLayout-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:id="@+id/l2">-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/activity_main_imageview_2"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
 
-        <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/iv2"-->
-            <!--android:background="@android:color/holo_green_light"-->
-            <!--android:scaleType="centerCrop" />-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:id="@+id/l3">-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/iv3"-->
-            <!--android:background="@android:color/holo_blue_light"-->
-            <!--android:scaleType="centerCrop" />-->
-    <!--</LinearLayout>-->
-</LinearLayout>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package ly.img.android.example_rembrandt;
+package ly.img.android.example;
 
 import org.junit.Test;
 

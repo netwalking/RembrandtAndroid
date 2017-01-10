@@ -2,11 +2,14 @@
   <library name="support-media-compat-25.0.1">
     <ANNOTATIONS>
       <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/73c85a736a5384e02be10f52bcb16d6fb03ac73e/output/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/73c85a736a5384e02be10f52bcb16d6fb03ac73e/output/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/73c85a736a5384e02be10f52bcb16d6fb03ac73e/output/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars/libs/internal_impl-25.0.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/73c85a736a5384e02be10f52bcb16d6fb03ac73e/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/73c85a736a5384e02be10f52bcb16d6fb03ac73e/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/73c85a736a5384e02be10f52bcb16d6fb03ac73e/output/jars/libs/internal_impl-25.0.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

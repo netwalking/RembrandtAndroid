@@ -2,11 +2,14 @@
   <library name="support-compat-25.0.1">
     <ANNOTATIONS>
       <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b114bdb2bb1503414b8bc3ddce948f4468e0b9ab/output/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b114bdb2bb1503414b8bc3ddce948f4468e0b9ab/output/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b114bdb2bb1503414b8bc3ddce948f4468e0b9ab/output/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars/libs/internal_impl-25.0.1.jar!/" />
-      <root url="file://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/res" />
-      <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/b114bdb2bb1503414b8bc3ddce948f4468e0b9ab/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b114bdb2bb1503414b8bc3ddce948f4468e0b9ab/output/jars/libs/internal_impl-25.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b114bdb2bb1503414b8bc3ddce948f4468e0b9ab/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
