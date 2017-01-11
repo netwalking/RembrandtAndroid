@@ -11,7 +11,7 @@ public class RembrandtCompareOptions {
     public static final float DEFAULT_MAXIMUM_COLOR_DISTANCE = 25.0f;
     public static final float DEFAULT_MAXIMUM_PERCENTAGE_OF_DIFFERENT_PIXELS = 1.0f;
     public static final int DEFAULT_COLOR_BITMAP_PIXEL_EQUAL = Color.TRANSPARENT;
-    public static final int DEFAULT_COLOR_BITMAP_PIXEL_DIFFERENT = Color.BLACK;
+    public static final int DEFAULT_COLOR_BITMAP_PIXEL_DIFFERENT = Color.RED;
 
     private final float maximumColorDistance;
     private final float maximumPercentageOfDifferentPixels;
