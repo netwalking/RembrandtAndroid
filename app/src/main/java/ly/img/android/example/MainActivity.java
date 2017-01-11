@@ -1,15 +1,12 @@
 package ly.img.android.example;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +46,7 @@ public class MainActivity extends Activity {
         layout = (LinearLayout) findViewById(R.id.activity_main_layout_imageviews);
         imageView1 = (ImageView) findViewById(R.id.activity_main_imageview_1);
         imageView2 = (ImageView) findViewById(R.id.activity_main_imageview_2);
+        comparisonImageView = (ImageView) findViewById(R.id.activity_main_imageview_comparison);
         compareButton = (Button) findViewById(R.id.activity_main_button_compare);
     }
 
@@ -84,63 +82,30 @@ public class MainActivity extends Activity {
     }
 
     private void showResult() {
+        comparisonImageView.setImageBitmap(compareResult.getComparisionBitmap());
+        comparisonImageView.setAlpha(0f);
+        comparisonImageView.setVisibility(View.VISIBLE);
+
         float parentY = layout.getY() + layout.getHeight() / 2;
         float child1Y = imageView1.getY() + imageView1.getHeight() / 2;
         float child2Y = imageView2.getY() + imageView2.getHeight() / 2;
 
-        TranslateAnimation animation1 = new TranslateAnimation(0, 0, 0, parentY - child1Y);
-        animation1.setDuration(1000);
-        animation1.setFillAfter(true);
-        animation1.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+        AnimatorSet moveAnimator = new AnimatorSet();
+        moveAnimator.playTogether(
+                ObjectAnimator.ofFloat(imageView1, "translationY", imageView1.getTranslationY(), parentY - child1Y),
+                ObjectAnimator.ofFloat(imageView2, "translationY", imageView2.getTranslationY(), parentY - child2Y)
+        );
+        moveAnimator.setDuration(1000);
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                addComparisonImageView();
-            }
+        AnimatorSet fadeAnimator = new AnimatorSet();
+        fadeAnimator.playTogether(
+                ObjectAnimator.ofFloat(comparisonImageView, "alpha", comparisonImageView.getAlpha(), 1)
+        );
+        fadeAnimator.setDuration(1000);
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-        TranslateAnimation animation2 = new TranslateAnimation(0, 0, 0, parentY - child2Y);
-        animation2.setDuration(1000);
-        animation2.setFillAfter(true);
-
-        imageView1.startAnimation(animation1);
-        imageView2.startAnimation(animation2);
+        AnimatorSet sequence = new AnimatorSet();
+        sequence.playSequentially(moveAnimator, fadeAnimator);
+        sequence.start();
     }
 
-    private void addComparisonImageView() {
-        comparisonImageView = new ImageView(this);
-        comparisonImageView.setImageBitmap(compareResult.getComparisionBitmap());
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0);
-        layoutParams.gravity = Gravity.CENTER;
-        comparisonImageView.setLayoutParams(layoutParams);
-
-        layout.addView(comparisonImageView);
-
-        AlphaAnimation animation = new AlphaAnimation(0f, 1f);
-        animation.setDuration(3000);
-        animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-        comparisonImageView.startAnimation(animation);
-    }
 }
