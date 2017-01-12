@@ -7,11 +7,28 @@
     android:orientation="vertical"
     android:id="@+id/activity_main" >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_main_textview_result"
+        android:text="@string/activity_main_textview"
+        android:textSize="18sp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_main_textview_result_info"
+        android:layout_gravity="center"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-         >
+        android:layout_weight="1" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +59,6 @@
             android:id="@+id/activity_main_imageview_comparison"
             android:scaleType="fitCenter" />
 
-
     </RelativeLayout>
     
     <Space
@@ -54,7 +70,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/activity_main_button_compare"
-        
-        android:text="@string/activity_main_button" />
+        android:text="@string/activity_main_button_compare" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/activity_main_button_separate"
+        android:visibility="gone"
+        android:text="@string/activity_main_button_separate" />
 
 </LinearLayout>

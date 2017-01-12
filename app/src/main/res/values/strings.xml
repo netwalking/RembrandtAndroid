@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Rembrandt Java</string>
-    <string name="activity_main_button">Compare!</string>
+    <string name="activity_main_button_compare">Compare!</string>
+    <string name="activity_main_button_separate">Separate!</string>
+    <string name="activity_main_textview">Press the button to compare the images!</string>
+    <string name="equality">Images are equal!</string>
+    <string name="diversity">Images are different!</string>
+    <string name="differences">differences: %d</string>
+    <string name="percentageDifferences">percentage of different pixels: %f%%</string>
 </resources>
