@@ -1,8 +1,6 @@
 package ly.img.android.rembrandt;
 
 import android.graphics.Bitmap;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 /**
  * Created by winklerrr on 13/12/2016.
@@ -10,20 +8,20 @@ import android.os.Parcelable;
 
 public class RembrandtComparisonResult {
 
-    private final long differentPixels;
+    private final int numberOfDifferentPixels;
     private final double percentageOfDifferentPixels;
     private final Bitmap comparisionBitmap;
     private final boolean bitmapsEqual;
 
-    public RembrandtComparisonResult(final long differentPixels, final double percentageOfDifferentPixels, final Bitmap comparisionBitmap, final boolean bitmapsEqual) {
-        this.differentPixels = differentPixels;
+    public RembrandtComparisonResult(final int numberOfDifferentPixels, final double percentageOfDifferentPixels, final Bitmap comparisionBitmap, final boolean bitmapsEqual) {
+        this.numberOfDifferentPixels = numberOfDifferentPixels;
         this.percentageOfDifferentPixels = percentageOfDifferentPixels;
         this.comparisionBitmap = comparisionBitmap;
         this.bitmapsEqual = bitmapsEqual;
     }
 
-    public long getDifferentPixels() {
-        return differentPixels;
+    public long getNumberOfDifferentPixels() {
+        return numberOfDifferentPixels;
     }
 
     public double getPercentageOfDifferentPixels() {
