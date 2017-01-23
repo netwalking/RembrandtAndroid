@@ -116,51 +116,6 @@ public class Rembrandt {
         rembrandtRenderScript.set_allowedColorDistance(compareOptions.getMaximumColorDistance());
     }
 
-    private void readBitmapConfig() {
-        if (areBitmapConfigsEqual(bitmap1, bitmap2)) {
-            config = bitmap1.getConfig();
-        } else {
-            throw new UnequalBitmapConfigException(bitmap1, bitmap2);
-        }
-    }
-
-    private void readBitmapDimensions() {
-        if (areBitmapDimensionsEqual(bitmap1, bitmap2)) {
-            width = bitmap1.getWidth();
-            height = bitmap1.getHeight();
-        } else {
-            throw new UnequalBitmapSizesException(bitmap1, bitmap2);
-        }
-    }
-
-    private static boolean areBitmapsComparable(final Bitmap bitmap1, final Bitmap bitmap2) {
-        return areBitmapConfigsEqual(bitmap1, bitmap2) && areBitmapDimensionsEqual(bitmap1, bitmap2);
-    }
-
-    private static boolean areBitmapConfigsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
-        return bitmap1.getConfig() == bitmap2.getConfig();
-    }
-
-    private static boolean areBitmapDimensionsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
-         return areBitmapWidthsEqual(bitmap1, bitmap2) && areBitmapHeightsEqual(bitmap1, bitmap2) ;
-    }
-
-    private static boolean areBitmapWidthsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
-        return bitmap1.getWidth() == bitmap2.getWidth();
-    }
-
-    private static boolean areBitmapHeightsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
-        return bitmap1.getHeight() == bitmap2.getHeight();
-    }
-
-    private static Short4 convertColorToShort4(final int color) {
-        final short red = (short) Color.red(color);
-        final short green = (short) Color.green(color);
-        final short blue = (short) Color.blue(color);
-        final short alpha = (short) Color.alpha(color);
-
-        // RenderScript uses RGBA for colors
-        return new Short4(red, green, blue, alpha);
     }
 
     private boolean isPercentageOfDifferentPixelsAcceptable(final double percentageOfDifferentPixels) {
