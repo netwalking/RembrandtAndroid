@@ -19,8 +19,8 @@ import static ly.img.android.rembrandt.BitmapHelper.areBitmapsComparable;
 
 public class Rembrandt {
 
-    private RembrandtCompareOptions compareOptions;
-    private RenderScript renderScript;
+    private final RembrandtCompareOptions compareOptions;
+    private final RenderScript renderScript;
 
     private ScriptC_rembrandt rembrandtRenderScript;
 
@@ -100,9 +100,5 @@ public class Rembrandt {
 
     public RembrandtCompareOptions getCompareOptions() {
         return compareOptions;
-    }
-
-    public void setCompareOptions(RembrandtCompareOptions compareOptions) {
-        this.compareOptions = compareOptions;
     }
 }
