@@ -117,7 +117,7 @@ public class Rembrandt {
     }
 
     private void readBitmapConfig() {
-        if (areBitmapConfigsEqual()) {
+        if (areBitmapConfigsEqual(bitmap1, bitmap2)) {
             config = bitmap1.getConfig();
         } else {
             throw new UnequalBitmapConfigException(bitmap1, bitmap2);
@@ -125,7 +125,7 @@ public class Rembrandt {
     }
 
     private void readBitmapDimensions() {
-        if (areBitmapDimensionsEqual()) {
+        if (areBitmapDimensionsEqual(bitmap1, bitmap2)) {
             width = bitmap1.getWidth();
             height = bitmap1.getHeight();
         } else {
@@ -133,12 +133,24 @@ public class Rembrandt {
         }
     }
 
-    private boolean areBitmapConfigsEqual() {
+    private static boolean areBitmapsComparable(final Bitmap bitmap1, final Bitmap bitmap2) {
+        return areBitmapConfigsEqual(bitmap1, bitmap2) && areBitmapDimensionsEqual(bitmap1, bitmap2);
+    }
+
+    private static boolean areBitmapConfigsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
         return bitmap1.getConfig() == bitmap2.getConfig();
     }
 
-    private boolean areBitmapDimensionsEqual() {
-        return bitmap1.getHeight() == bitmap2.getHeight() && bitmap1.getWidth() == bitmap2.getWidth();
+    private static boolean areBitmapDimensionsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
+         return areBitmapWidthsEqual(bitmap1, bitmap2) && areBitmapHeightsEqual(bitmap1, bitmap2) ;
+    }
+
+    private static boolean areBitmapWidthsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
+        return bitmap1.getWidth() == bitmap2.getWidth();
+    }
+
+    private static boolean areBitmapHeightsEqual(final Bitmap bitmap1, final Bitmap bitmap2) {
+        return bitmap1.getHeight() == bitmap2.getHeight();
     }
 
     private static Short4 convertColorToShort4(final int color) {
@@ -147,6 +159,7 @@ public class Rembrandt {
         final short blue = (short) Color.blue(color);
         final short alpha = (short) Color.alpha(color);
 
+        // RenderScript uses RGBA for colors
         return new Short4(red, green, blue, alpha);
     }
 
