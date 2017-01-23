@@ -1,6 +1,5 @@
 package ly.img.android.rembrandt;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -10,8 +9,9 @@ import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.Short4;
 import android.support.v8.renderscript.Type;
 
-import ly.img.android.rembrandt.exceptions.UnequalBitmapConfigException;
-import ly.img.android.rembrandt.exceptions.UnequalBitmapSizesException;
+import ly.img.android.rembrandt.exceptions.BitmapsUncomparableException;
+
+import static ly.img.android.rembrandt.BitmapHelper.areBitmapsComparable;
 
 /**
  * Created by winklerrr on 13/12/2016.
@@ -21,22 +21,18 @@ public class Rembrandt {
 
     private RembrandtCompareOptions compareOptions;
     private RenderScript renderScript;
+
     private ScriptC_rembrandt rembrandtRenderScript;
 
     private Bitmap bitmap1;
     private Bitmap bitmap2;
     private Bitmap comparisonBitmap;
-    private Bitmap.Config config;
-    private int width;
-    private int height;
+
+    private int[] numberOfDifferentPixels = new int[1];
 
     private Allocation allocationBitmap1;
     private Allocation allocationBitmap2;
     private Allocation allocationComparisonBitmap;
-    private Short4 colorEquality;
-    private Short4 colorDiversity;
-
-    private int[] numberOfDifferentPixels = new int[1];
     private Allocation allocationDifferences;
 
     public Rembrandt(final Context context) {
@@ -49,73 +45,53 @@ public class Rembrandt {
     }
 
     public RembrandtComparisonResult compareBitmaps(final Bitmap bitmap1, final Bitmap bitmap2) {
-        this.bitmap1 = bitmap1;
-        this.bitmap2 = bitmap2;
-
-        prepareComparison();
-        compare();
-        return createComparisonResult();
+        if (areBitmapsComparable(bitmap1, bitmap2)) {
+            this.bitmap1 = bitmap1;
+            this.bitmap2 = bitmap2;
+            return compare();
+        } else {
+            throw new BitmapsUncomparableException(bitmap1, bitmap2);
+        }
     }
 
-    private void prepareComparison() {
-        createComparisonBitmap();
-        createRembrandtRenderScript();
-    }
+    private RembrandtComparisonResult compare() {
+        comparisonBitmap = Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), bitmap1.getConfig());
 
-    private void compare() {
-        rembrandtRenderScript.forEach_compareBitmaps(allocationComparisonBitmap);
-        allocationComparisonBitmap.syncAll(Allocation.USAGE_SCRIPT);
-        allocationComparisonBitmap.copyTo(comparisonBitmap);
-        allocationDifferences.copyTo(numberOfDifferentPixels);
+        createAllocations();
+        initRenderScript();
+        runRenderScript();
 
-    }
-
-    private RembrandtComparisonResult createComparisonResult() {
-        final int pixelsInTotal = width * height;
-        final double percentageOfDifferentPixels = numberOfDifferentPixels[0] * 100f/ pixelsInTotal;
+        final int pixelsInTotal = bitmap1.getWidth() * bitmap1.getHeight();
+        final double percentageOfDifferentPixels = numberOfDifferentPixels[0] * 100f / pixelsInTotal;
         final boolean bitmapsSeemToBeEqual = isPercentageOfDifferentPixelsAcceptable(percentageOfDifferentPixels);
         return new RembrandtComparisonResult(numberOfDifferentPixels[0], percentageOfDifferentPixels, comparisonBitmap, bitmapsSeemToBeEqual);
-    }
-
-    private void createComparisonBitmap() {
-        readBitmapProperties();
-        comparisonBitmap = Bitmap.createBitmap(width, height, config);
-    }
-
-    private void createRembrandtRenderScript() {
-        createAllocations();
-        initRembrandtRenderScript();
-    }
-
-    private void readBitmapProperties() {
-        readBitmapConfig();
-        readBitmapDimensions();
     }
 
     private void createAllocations() {
         allocationBitmap1 = Allocation.createFromBitmap(renderScript, bitmap1);
         allocationBitmap2 = Allocation.createFromBitmap(renderScript, bitmap2);
         allocationComparisonBitmap = Allocation.createFromBitmap(renderScript, comparisonBitmap);
-
         allocationDifferences = Allocation.createTyped(renderScript, Type.createX(renderScript, Element.I32(renderScript), 1));
-        colorEquality = convertColorToShort4(compareOptions.getColorForEquality());
-        colorDiversity = convertColorToShort4(compareOptions.getColorForDiversity());
     }
 
-    private void initRembrandtRenderScript() {
+    private void initRenderScript() {
         rembrandtRenderScript = new ScriptC_rembrandt(renderScript);
 
         rembrandtRenderScript.set_rsAllocationBitmap1(allocationBitmap1);
         rembrandtRenderScript.set_rsAllocationBitmap2(allocationBitmap2);
         rembrandtRenderScript.set_rsAllocationComparisonBitmap(allocationComparisonBitmap);
-
         rembrandtRenderScript.set_rsAllocationDifferences(allocationDifferences);
-        rembrandtRenderScript.set_colorEquality(colorEquality);
-        rembrandtRenderScript.set_colorDiversity(colorDiversity);
 
+        rembrandtRenderScript.set_colorEquality(compareOptions.getColorForEquality());
+        rembrandtRenderScript.set_colorDiversity(compareOptions.getColorForDiversity());
         rembrandtRenderScript.set_allowedColorDistance(compareOptions.getMaximumColorDistance());
     }
 
+    private void runRenderScript() {
+        rembrandtRenderScript.forEach_compareBitmaps(allocationComparisonBitmap);
+        allocationComparisonBitmap.syncAll(Allocation.USAGE_SCRIPT);
+        allocationComparisonBitmap.copyTo(comparisonBitmap);
+        allocationDifferences.copyTo(numberOfDifferentPixels);
     }
 
     private boolean isPercentageOfDifferentPixelsAcceptable(final double percentageOfDifferentPixels) {
