@@ -113,7 +113,7 @@ public class MainActivity extends Activity {
     }
 
     private void compareBitmaps() {
-        compareResult = new Rembrandt().compareBitmaps(bitmap1, bitmap2);
+        compareResult = new Rembrandt(this).compareBitmaps(bitmap1, bitmap2);
     }
 
     private void showResult() {

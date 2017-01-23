@@ -1,6 +1,7 @@
 package ly.img.android.rembrandt;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v8.renderscript.Allocation;
@@ -18,7 +19,6 @@ import ly.img.android.rembrandt.exceptions.UnequalBitmapSizesException;
 
 public class Rembrandt {
 
-    private static Application context;
     private RembrandtCompareOptions compareOptions;
     private RenderScript renderScript;
     private ScriptC_rembrandt rembrandtRenderScript;
@@ -39,21 +39,13 @@ public class Rembrandt {
     private int[] numberOfDifferentPixels = new int[1];
     private Allocation allocationDifferences;
 
-    public Rembrandt() {
-        this(RembrandtCompareOptions.createDefaultOptions());
+    public Rembrandt(final Context context) {
+        this(context, RembrandtCompareOptions.createDefaultOptions());
     }
 
-    public Rembrandt(final RembrandtCompareOptions compareOptions) {
-        if (context == null) {
-            throw new NullPointerException("Context is null. Forgot to call init?");
-        }
-
+    public Rembrandt(final Context context, final RembrandtCompareOptions compareOptions) {
+        this.renderScript = RenderScript.create(context);
         this.compareOptions = compareOptions;
-        renderScript = RenderScript.create(context);
-    }
-
-    public static void init(final Application context) {
-        Rembrandt.context = context;
     }
 
     public RembrandtComparisonResult compareBitmaps(final Bitmap bitmap1, final Bitmap bitmap2) {
