@@ -1,6 +1,7 @@
 package ly.img.android.rembrandt;
 
 import android.graphics.Color;
+import android.support.v8.renderscript.Short4;
 
 /**
  * Created by winklerrr on 13/12/2016.
@@ -15,14 +16,14 @@ public class RembrandtCompareOptions {
 
     private final float maximumColorDistance;
     private final float maximumPercentageOfDifferentPixels;
-    private final int colorForEquality;
-    private final int colorForDiversity;
+    private final Short4 colorForEquality;
+    private final Short4 colorForDiversity;
 
     public RembrandtCompareOptions(final float maximumColorDistance, final float maximumPercentageDifference, final int colorForEquality, final int colorForDiversity) {
         this.maximumColorDistance = maximumColorDistance;
         this.maximumPercentageOfDifferentPixels = maximumPercentageDifference;
-        this.colorForEquality = colorForEquality;
-        this.colorForDiversity = colorForDiversity;
+        this.colorForEquality = BitmapHelper.convertColorToShort4(colorForEquality);
+        this.colorForDiversity = BitmapHelper.convertColorToShort4(colorForDiversity);
     }
 
     public static RembrandtCompareOptions createDefaultOptions() {
@@ -40,11 +41,12 @@ public class RembrandtCompareOptions {
         return maximumPercentageOfDifferentPixels;
     }
 
-    public int getColorForEquality() {
+    public Short4 getColorForEquality() {
         return colorForEquality;
     }
 
-    public int getColorForDiversity() {
+
+    public Short4 getColorForDiversity() {
         return colorForDiversity;
     }
 }
