@@ -1,11 +1,5 @@
 <component name="libraryTable">
   <library name="support-core-utils-25.0.1">
-    <ANNOTATIONS>
-      <root url="jar://$PROJECT_DIR$/rembrandtAndroid/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/annotations.zip!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/87686237f760b00aab2452b4bedfc764a10d4860/output/annotations.zip!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/87686237f760b00aab2452b4bedfc764a10d4860/output/annotations.zip!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/87686237f760b00aab2452b4bedfc764a10d4860/output/annotations.zip!/" />
-    </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$USER_HOME$/.android/build-cache/87686237f760b00aab2452b4bedfc764a10d4860/output/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.android/build-cache/87686237f760b00aab2452b4bedfc764a10d4860/output/res" />
