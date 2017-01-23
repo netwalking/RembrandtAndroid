@@ -3,6 +3,10 @@ package ly.img.android.rembrandt;
 import android.graphics.Color;
 import android.support.v8.renderscript.Short4;
 
+import ly.img.android.rembrandt.helpers.BitmapHelper;
+
+import static ly.img.android.rembrandt.helpers.BitmapHelper.*;
+
 /**
  * Created by winklerrr on 13/12/2016.
  */
@@ -22,8 +26,8 @@ public class RembrandtCompareOptions {
     public RembrandtCompareOptions(final float maximumColorDistance, final float maximumPercentageDifference, final int colorForEquality, final int colorForDiversity) {
         this.maximumColorDistance = maximumColorDistance;
         this.maximumPercentageOfDifferentPixels = maximumPercentageDifference;
-        this.colorForEquality = BitmapHelper.convertColorToShort4(colorForEquality);
-        this.colorForDiversity = BitmapHelper.convertColorToShort4(colorForDiversity);
+        this.colorForEquality = convertColorToShort4(colorForEquality);
+        this.colorForDiversity = convertColorToShort4(colorForDiversity);
     }
 
     public static RembrandtCompareOptions createDefaultOptions() {

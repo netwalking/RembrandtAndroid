@@ -1,4 +1,4 @@
-package ly.img.android.rembrandt;
+package ly.img.android.rembrandt.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

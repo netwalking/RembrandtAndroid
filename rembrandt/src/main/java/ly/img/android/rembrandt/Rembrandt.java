@@ -9,7 +9,7 @@ import android.support.v8.renderscript.Type;
 
 import ly.img.android.rembrandt.exceptions.BitmapsUncomparableException;
 
-import static ly.img.android.rembrandt.BitmapHelper.areBitmapsComparable;
+import static ly.img.android.rembrandt.helpers.BitmapHelper.areBitmapsComparable;
 
 /**
  * Created by winklerrr on 13/12/2016.
