@@ -1,0 +1,138 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+
+apply from: "$rootDir/methods.gradle"
+
+def rembrandtVersionCode = 1
+def rembrandtVersionName = "0.0.2"
+
+def libraryGroupId = 'ly.img.android.rembrandt'
+def libraryArtifactId = 'rembrandt'
+def libraryVersion = rembrandtVersionName
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode rembrandtVersionCode
+        versionName rembrandtVersionName
+
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+configurations {
+    javadocDeps
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    testCompile 'junit:junit:4.12'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.javadocDeps
+    failOnError false
+}
+
+task aggregateJavadocs(type: Javadoc) {
+    exclude '**/ly/img/android/**'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId libraryGroupId
+            version libraryVersion
+            artifactId libraryArtifactId
+
+            artifact("$buildDir/outputs/aar/${libraryArtifactId}-release.aar")
+            //artifact javadocJar
+
+            pom.withXml {
+                def root = asNode();
+
+                root.appendNode('name', 'Rembrandt')
+                root.appendNode('description', 'The img.ly Rembrandt provides a Android.')
+
+                def licensesNode = root.appendNode('licenses')
+                def licenseNode = licensesNode.appendNode('license')
+                licenseNode.appendNode('name', 'PROPRIETARY')
+                licenseNode.appendNode('url', 'https://github.com/imgly/rembrandt/blob/master/LICENSE.md')
+                licenseNode.appendNode('comments', project.rootProject.file('LICENSE.MD').getText('UTF-8'))
+
+                def dependenciesNode = root.appendNode('dependencies')
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.compile.allDependencies.each {
+                    if (it.group != null && it.name != null && it.version != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+}
+
+logger.quiet("$buildDir/outputs/aar/$libraryArtifactId-release.aar")
+
+def user = getLocalProperty('artifactory.username', null);
+def pass = getLocalProperty('artifactory.password', null);
+
+artifactory {
+    contextUrl = 'https://artifactory.9elements.com/artifactory'
+    publish {
+        repository {
+            repoKey = 'imgly'
+
+            username = "${user}"
+            password = "${pass}"
+
+            maven = true
+        }
+        defaults {
+            publishArtifacts = true
+            publications('aar')
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'core']
+            publishPom = true
+        }
+    }
+}
