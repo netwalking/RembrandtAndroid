@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rembrandt Java</string>
+    <string name="app_name">ImgLy Rembrandt</string>
     <string name="activity_main_button_compare">Compare!</string>
     <string name="activity_main_button_separate">Separate!</string>
     <string name="activity_main_textview">Press the button to compare the images!</string>
