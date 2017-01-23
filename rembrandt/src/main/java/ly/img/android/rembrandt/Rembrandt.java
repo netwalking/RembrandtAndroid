@@ -2,11 +2,9 @@ package ly.img.android.rembrandt;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.Short4;
 import android.support.v8.renderscript.Type;
 
 import ly.img.android.rembrandt.exceptions.BitmapsUncomparableException;
@@ -18,6 +16,12 @@ import static ly.img.android.rembrandt.BitmapHelper.areBitmapsComparable;
  */
 
 public class Rembrandt {
+
+    /**
+     * Tag for TimmingLogger. Log needs to be activated through:
+     * adb shell setprop log.tag.Rembrandt VERBOSE
+     */
+    private static final String TAG = "Rembrandt";
 
     private final RembrandtCompareOptions compareOptions;
     private final RenderScript renderScript;
