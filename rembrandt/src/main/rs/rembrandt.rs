@@ -27,7 +27,7 @@ void compareBitmaps(uchar4 *unused, uint32_t x, uint32_t y) {
     colorDistance += deltaRed * deltaRed;
     colorDistance += deltaGreen * deltaGreen;
     colorDistance += deltaBlue * deltaBlue;
-    colorDistance = sqrt(colorDistance * 255);
+    colorDistance = sqrt(colorDistance);
 
     uchar4 colorToSet;
     if (colorDistance < allowedColorDistance) {
