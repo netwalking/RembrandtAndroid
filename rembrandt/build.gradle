@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.artifactory'
 apply from: "$rootDir/methods.gradle"
 
 def rembrandtVersionCode = 1
-def rembrandtVersionName = "0.0.2"
+def rembrandtVersionName = "1.0.0"
 
 def libraryGroupId = 'ly.img.android.rembrandt'
 def libraryArtifactId = 'rembrandt'
