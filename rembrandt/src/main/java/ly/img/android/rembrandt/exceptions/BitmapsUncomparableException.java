@@ -7,6 +7,11 @@ import android.graphics.Bitmap;
  */
 
 public class BitmapsUncomparableException extends RuntimeException {
+
+    public BitmapsUncomparableException() {
+        super("Bitmap are uncomparable. Either their configs differ or their dimensions.");
+    }
+
     public BitmapsUncomparableException(final Bitmap bitmap1, final Bitmap bitmap2) {
         super("Bitmap are uncomparable. Either their configs differ or their dimensions."
                 + "\nConfigs: "

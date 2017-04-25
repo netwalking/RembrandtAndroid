@@ -23,18 +23,28 @@ public class RembrandtCompareOptions {
     private final Short4 colorForEquality;
     private final Short4 colorForDiversity;
 
-    public RembrandtCompareOptions(final float maximumColorDistance, final float maximumPercentageDifference, final int colorForEquality, final int colorForDiversity) {
+    private final boolean createVisualResult;
+
+    public RembrandtCompareOptions(final float maximumColorDistance, final float maximumPercentageDifference, final int colorForEquality, final int colorForDiversity, final boolean createVisualResult) {
         this.maximumColorDistance = maximumColorDistance;
         this.maximumPercentageOfDifferentPixels = maximumPercentageDifference;
         this.colorForEquality = convertColorToShort4(colorForEquality);
         this.colorForDiversity = convertColorToShort4(colorForDiversity);
+        this.createVisualResult = createVisualResult;
     }
 
     public static RembrandtCompareOptions createDefaultOptions() {
-        return new RembrandtCompareOptions(DEFAULT_MAXIMUM_COLOR_DISTANCE,
-                DEFAULT_MAXIMUM_PERCENTAGE_OF_DIFFERENT_PIXELS,
-                DEFAULT_COLOR_BITMAP_PIXEL_EQUAL,
-                DEFAULT_COLOR_BITMAP_PIXEL_DIFFERENT);
+        return new RembrandtCompareOptions(
+          DEFAULT_MAXIMUM_COLOR_DISTANCE,
+          DEFAULT_MAXIMUM_PERCENTAGE_OF_DIFFERENT_PIXELS,
+          DEFAULT_COLOR_BITMAP_PIXEL_EQUAL,
+          DEFAULT_COLOR_BITMAP_PIXEL_DIFFERENT,
+          true
+        );
+    }
+
+    public boolean isCreateVisualResult() {
+        return createVisualResult;
     }
 
     public float getMaximumColorDistance() {
